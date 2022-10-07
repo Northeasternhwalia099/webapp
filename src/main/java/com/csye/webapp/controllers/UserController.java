@@ -30,7 +30,7 @@ import com.csye.webapp.repository.UserRepository;
 import com.google.gson.JsonObject;
 
 
-//cont
+//controler
 @RestController
 public class UserController {
 
