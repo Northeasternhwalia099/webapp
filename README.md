@@ -21,5 +21,11 @@ Enter the credentials provided in step 7 and click 'Send'\
 If the credentials are correct, the given response is shown with correct status codes\
 Now select PUT option and enter the URL as "http://localhost:8080/v1/account/{id}"\
 If the credentials are correct, the user is updated correct status codes\
-#checking update readme update ass04
-run test by maven: mvn test
+
+For documents uplaods in s3 buckets:\
+ENDPOINTS:\
+Uploading doc for particular user: "http://localhost:8080/v1/documents/"\
+Getting particular user document "http://localhost:8080/v1/document/{id}"\
+Get all documents for particular user: "http://localhost:8080/v1/documents/"\
+Delete document for particular user:"http://localhost:8080/v1/documents/"\
+
