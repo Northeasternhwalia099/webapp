@@ -27,5 +27,6 @@ ENDPOINTS:\
 Uploading doc for particular user: "http://localhost:8080/v1/documents/"\
 Getting particular user document "http://localhost:8080/v1/document/{id}"\
 Get all documents for particular user: "http://localhost:8080/v1/documents/"\
-Delete document for particular user:"http://localhost:8080/v1/documents/"\
+Delete documents for particular user:"http://localhost:8080/v1/documents/"\
+
 
