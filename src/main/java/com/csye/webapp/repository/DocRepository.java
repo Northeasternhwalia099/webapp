@@ -17,6 +17,8 @@ public interface DocRepository extends JpaRepository<Document, Integer> {
 
     public Document findById(String id);
 
+    public List<Document> findByName(String name);
+
     void deleteById(String id);
 
     List<Document> findAllByUserid(String id);
