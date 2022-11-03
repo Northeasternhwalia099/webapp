@@ -85,6 +85,10 @@ public class S3Controller {
                 long end = System.currentTimeMillis();
                 LOG.error("Invalid password");
                 responseEntity.addProperty("message", "Invalid password");
+            } else if (!(documentRepository.findByName(file.getOriginalFilename()).isEmpty())) {
+                LOG.error("File already uploaded");
+                responseEntity.addProperty("message", "File already exists");
+                return new ResponseEntity<String>(responseEntity.toString(), HttpStatus.BAD_REQUEST);
             } else {
                 String path = s3Service.saveFile(file, user.getId());
 
