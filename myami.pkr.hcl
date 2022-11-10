@@ -61,10 +61,13 @@ build {
   }
 
   provisioner "file" {
-
     source      = "./appservice.service"
     destination = "/tmp/appservice.service"
 
+  }
+  provisioner "file" {
+    source      = "./cloudwatch-config.json"
+    destination = "/home/ubuntu/cloudwatch-config.json"
   }
 
   provisioner "shell" {
