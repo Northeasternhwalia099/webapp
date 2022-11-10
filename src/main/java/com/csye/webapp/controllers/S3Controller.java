@@ -6,6 +6,8 @@ import com.csye.webapp.repository.DocRepository;
 import com.csye.webapp.repository.UserRepository;
 import com.csye.webapp.service.S3BucketService;
 import com.google.gson.JsonObject;
+import com.timgroup.statsd.StatsDClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,8 @@ public class S3Controller {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    StatsDClient statsDClient;
 
     @Autowired
     private DocRepository documentRepository;
@@ -61,6 +65,7 @@ public class S3Controller {
     @PostMapping("/v1/documents")
     public ResponseEntity<?> uploadFiles(@RequestParam("file") MultipartFile file, HttpServletRequest request,
             HttpServletResponse response) {
+        statsDClient.incrementCounter("create user api");
         LOG.info("Inside upload file");
         long start = System.currentTimeMillis();
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -124,6 +129,7 @@ public class S3Controller {
     @GetMapping("/v1/documents/{id}")
     public ResponseEntity<?> getDocument(@PathVariable String id, HttpServletRequest request,
             HttpServletResponse response) {
+        statsDClient.incrementCounter("create user api");
         LOG.info("Inside getDocument() method");
         long start = System.currentTimeMillis();
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -171,6 +177,7 @@ public class S3Controller {
     @DeleteMapping("/v1/documents/{id}")
     public ResponseEntity<String> deleteFile(@PathVariable String id, HttpServletRequest request,
             HttpServletResponse response) {
+        statsDClient.incrementCounter("create user api");
         HttpHeaders responseHeaders = new HttpHeaders();
         String authorization = request.getHeader("Authorization");
         JsonObject responseEntity = new JsonObject();
@@ -220,6 +227,7 @@ public class S3Controller {
 
     @GetMapping("/v1/documents")
     public ResponseEntity<?> getAllDocuments(HttpServletRequest request, HttpServletResponse response) {
+        statsDClient.incrementCounter("create user api");
         LOG.info("Inside upload file");
         long start = System.currentTimeMillis();
         HttpHeaders responseHeaders = new HttpHeaders();
