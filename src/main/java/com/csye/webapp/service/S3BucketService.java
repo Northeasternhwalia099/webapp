@@ -19,9 +19,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.io.ByteArrayInputStream;
+import java.util.Calendar;
 import java.util.Date;
 
 @Service
@@ -37,13 +39,18 @@ public class S3BucketService implements S3ServiceFileImple {
     }
 
     public String saveFile(MultipartFile file, String userid) {
-        String fileName = file.getOriginalFilename();
-        String folder = "folder";
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+
+        String fileName = file.getOriginalFilename() + timeStamp;
+        // String folder = "folder";
         try {
-            File convertedFile = convertMultiPartFile(file);
-            PutObjectResult putObjectResult = s3.putObject(bucketName, userid + "/" + fileName, convertedFile);
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(file.getSize());
+            // File convertedFile = convertMultiPartFile(file);
+            s3.putObject(bucketName, userid + "/" + fileName, file.getInputStream(), metadata);
             return " " + s3.getUrl(bucketName, userid + "/" + fileName);
         } catch (IOException ex) {
+            // LOGGIN_LOGGER.error(ex.getMessage());
             throw new RuntimeException(ex);
         }
 

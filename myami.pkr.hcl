@@ -17,7 +17,7 @@ variable "ssh_username" {
 
 variable "subnet_id" {
   type    = string
-  default = "subnet-030fd164c2e4dc5c9" #added my subnet
+  default = "subnet-86dd78b7" #added my subnet
 }
 
 
@@ -29,7 +29,7 @@ source "amazon-ebs" "my-ami" {
   ami_regions = [
     "us-east-1",
   ]
-  ami_users = ["739524752896"] #accounts where the ami will be available once created
+  ami_users = ["278111652716"] #accounts where the ami will be available once created
 
   aws_polling {
     delay_seconds = 120

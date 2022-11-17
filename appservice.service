@@ -2,10 +2,10 @@
 Description=Web App
 
 [Service]
-ExecStart= /usr/bin/java -jar /home/ubuntu/webapp-0.0.1-SNAPSHOT.jar
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=web-app
+sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
+ExecStart= /usr/bin/java -jar /home/ubuntu/webapp-app-0.0.1-SNAPSHOT.jar
+StandardOutput= append:/var/log/csye6225.log
+StandardError= append:/var/log/csye6225.log
 User=ubuntu
 
 [Install]

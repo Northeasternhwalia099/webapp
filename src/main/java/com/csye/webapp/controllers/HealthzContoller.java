@@ -8,17 +8,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.timgroup.statsd.StatsDClient;
 
 @RestController
 public class HealthzContoller {
     @Autowired
     StatsDClient statsDClient;
+    private final static Logger LOG = LoggerFactory.getLogger(UserController.class);
 
     @RequestMapping("/healthz")
     public ResponseEntity<?> get() {
-        statsDClient.incrementCounter("create user api");
+        LOG.info("Inside HEALTHZ controller");
+        LOG.info("healthz endpoint are hit");
+        statsDClient.incrementCounter("healthz api");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

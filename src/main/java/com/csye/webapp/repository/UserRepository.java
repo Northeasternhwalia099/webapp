@@ -8,4 +8,10 @@ import com.csye.webapp.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
 	User findByemail(String email);
+
+	public default void verifyUser(User user) {
+		user.setIs_verified(true);
+		save(user);
+
+	}
 }

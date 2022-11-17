@@ -66,7 +66,9 @@ public class S3Controller {
     public ResponseEntity<?> uploadFiles(@RequestParam("file") MultipartFile file, HttpServletRequest request,
             HttpServletResponse response) {
         statsDClient.incrementCounter("create user api");
-        LOG.info("Inside upload file");
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+
+        LOG.info("Inside post api");
         long start = System.currentTimeMillis();
         HttpHeaders responseHeaders = new HttpHeaders();
         String authorization = request.getHeader("Authorization");
@@ -80,7 +82,7 @@ public class S3Controller {
             String email = userCredentials[0];
 
             String password = userCredentials[1];
-
+            String path = "";
             User user = userRepository.findByemail(email);
             if (user == null) {
                 long end = System.currentTimeMillis();
@@ -90,12 +92,18 @@ public class S3Controller {
                 long end = System.currentTimeMillis();
                 LOG.error("Invalid password");
                 responseEntity.addProperty("message", "Invalid password");
-            } else if (!(documentRepository.findByName(file.getOriginalFilename()).isEmpty())) {
-                LOG.error("File already uploaded");
-                responseEntity.addProperty("message", "File already exists");
-                return new ResponseEntity<String>(responseEntity.toString(), HttpStatus.BAD_REQUEST);
-            } else {
-                String path = s3Service.saveFile(file, user.getId());
+            }
+            // } else if (!(documentRepository.findByName(file.getOriginalFilename()).isEmpty())) {
+            //     LOG.error("File already uploaded");
+            //     responseEntity.addProperty("message", "File already exists");
+            //     return new ResponseEntity<String>(responseEntity.toString(), HttpStatus.BAD_REQUEST);
+            // } 
+            else {
+                try {
+                    path = s3Service.saveFile(file, user.getId());
+                } catch (Exception ex) {
+                    LOG.info("S3 Bucket Save File Exception " + ex.getMessage());
+                }
 
                 // user.setPassword(null);
                 long end = System.currentTimeMillis();
@@ -105,13 +113,17 @@ public class S3Controller {
                 Document document = new Document();
                 String user_id = user.getId();
                 document.setUserid(user_id); // (user_id);
+
                 document.setName(file.getOriginalFilename());
                 // document.setName("MyFile");
                 document.setDate_created(dateFormat);
                 document.setS3_bucket_path(path);
 
-                documentRepository.save(document);
-
+                try {
+                    documentRepository.save(document);
+                } catch (Exception ex) {
+                    LOG.error("Error saving the document in the Database error " + ex.getStackTrace());
+                }
                 return new ResponseEntity<Document>(document, HttpStatus.OK);
             }
 
@@ -150,6 +162,11 @@ public class S3Controller {
                 long end = System.currentTimeMillis();
                 LOG.error("User doesn't exist");
                 responseEntity.addProperty("message", "User doesn't exist");
+            } else if (!(user.isIs_verified())) {
+
+                responseEntity.addProperty("message", "User is not verified");
+
+                return new ResponseEntity<String>(responseEntity.toString(), HttpStatus.OK);
             } else if (user != null && !bCryptPasswordEncoder.matches(password, user.getPassword())) {
                 long end = System.currentTimeMillis();
                 LOG.error("Invalid password");
@@ -183,6 +200,7 @@ public class S3Controller {
         JsonObject responseEntity = new JsonObject();
         if (authorization != null && authorization.toLowerCase().startsWith("basic")) {
             authorization = authorization.replaceFirst("Basic ", "");
+            statsDClient.incrementCounter("delete document api");
             LOG.info("Inside basic auth");
             String credentials = new String(Base64.getDecoder().decode(authorization.getBytes()));
 
@@ -196,6 +214,11 @@ public class S3Controller {
                 long end = System.currentTimeMillis();
                 LOG.error("User doesn't exist");
                 responseEntity.addProperty("message", "User doesn't exist");
+            } else if (!(user.isIs_verified())) {
+
+                responseEntity.addProperty("message", "User is not verified");
+
+                return new ResponseEntity<String>(responseEntity.toString(), HttpStatus.OK);
             } else if (user != null && !bCryptPasswordEncoder.matches(password, user.getPassword())) {
                 long end = System.currentTimeMillis();
                 LOG.error("Invalid password");
@@ -228,7 +251,7 @@ public class S3Controller {
     @GetMapping("/v1/documents")
     public ResponseEntity<?> getAllDocuments(HttpServletRequest request, HttpServletResponse response) {
         statsDClient.incrementCounter("create user api");
-        LOG.info("Inside upload file");
+        LOG.info("Inside get api documents");
         long start = System.currentTimeMillis();
         HttpHeaders responseHeaders = new HttpHeaders();
         String authorization = request.getHeader("Authorization");
@@ -248,6 +271,11 @@ public class S3Controller {
                 long end = System.currentTimeMillis();
                 LOG.error("User doesn't exist");
                 responseEntity.addProperty("message", "User doesn't exist");
+            } else if (!(user.isIs_verified())) {
+
+                responseEntity.addProperty("message", "User is not verified");
+
+                return new ResponseEntity<String>(responseEntity.toString(), HttpStatus.OK);
             } else if (user != null && !bCryptPasswordEncoder.matches(password, user.getPassword())) {
                 long end = System.currentTimeMillis();
                 LOG.error("Invalid password");

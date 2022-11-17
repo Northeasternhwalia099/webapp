@@ -15,53 +15,50 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "users")
 public class User {
 
-	@Id 
-	@GeneratedValue(generator="uuid2")
-	@GenericGenerator(name="uuid2", strategy = "uuid2")
-	@Column(name="id")	
+	@Id
+	@GeneratedValue(generator = "uuid2")
+	@GenericGenerator(name = "uuid2", strategy = "uuid2")
+	@Column(name = "id")
 	private String id;
-	
+
 	@JsonProperty("first_name")
-	@Column(name="first_name")	
+	@Column(name = "first_name")
 	private String firstName;
-	
+
 	@JsonProperty("last_name")
-	@Column(name="last_name")	
+	@Column(name = "last_name")
 	private String lastName;
-	
+
 	@JsonProperty("password")
 	@JsonInclude(Include.NON_NULL)
 	@Column(name = "password")
 	private String password;
-	
+
 	@JsonProperty("email_address")
 	@Column(name = "email_address")
 	private String email;
-	
+
 	@JsonProperty("account_created")
 	@Column(name = "account_created")
 	private String account_created;
-	
-	
+
 	@JsonProperty("account_updated")
 	@Column(name = "account_updated")
 	private String account_updated;
 
-	
-	public User()
-	{
-		
+	private boolean is_verified;
+
+	public User() {
+
 	}
-	
-	public User(String id, String email, String password)
-	{
+
+	public User(String id, String email, String password) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
 	}
-	
-	
-	//getter setters
+
+	// getter setters
 	public String getId() {
 		return id;
 	}
@@ -123,9 +120,13 @@ public class User {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", account_created=" + account_created + ", account_updated=" + account_updated + "]";
 	}
-	
-	
-	
-	
+
+	public boolean isIs_verified() {
+		return is_verified;
+	}
+
+	public void setIs_verified(boolean is_verified) {
+		this.is_verified = is_verified;
+	}
 
 }
