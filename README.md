@@ -23,7 +23,7 @@ Now select PUT option and enter the URL as "http://localhost:8080/v1/account/{id
 If the credentials are correct, the user is updated correct status codes\
 
 For documents uplaods in s3 buckets:\
-ENDPOINTS:\
+ENDPOINTS are:
 Uploading doc for particular user: "http://localhost:8080/v1/documents/"\
 Getting particular user document "http://localhost:8080/v1/document/{id}"\
 Get all documents for particular user: "http://localhost:8080/v1/documents/"\
