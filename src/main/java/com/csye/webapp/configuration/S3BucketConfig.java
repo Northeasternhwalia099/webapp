@@ -13,22 +13,23 @@ import com.amazonaws.services.s3.AmazonS3;
 
 @Configuration
 public class S3BucketConfig {
-
-    @Value("${accessKey}")
-    private String accessKey;
-
-    @Value("${secret}")
-    private String secret;
-
     @Value("${region}")
-    private String region;
-
+    private String region_is;
+    @Value("${secret}")
+    private String secret_is;
+    @Value("${accessKey}")
+    private String access_Keyis;
     @Bean
-    public AmazonS3 s3() {
+    public AmazonS3 s3bucket() {
 
-        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secret);
-        return AmazonS3ClientBuilder.standard().withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build();
+        AWSCredentials aws_creds = 
+                new BasicAWSCredentials(access_Keyis, secret_is);
+        return 
+                AmazonS3ClientBuilder
+                        .standard()
+                        .withRegion(region_is)
+                .withCredentials(new AWSStaticCredentialsProvider(aws_creds))
+                        .build();
 
     }
 }

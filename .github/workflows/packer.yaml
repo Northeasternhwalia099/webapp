@@ -1,4 +1,4 @@
-name:  Assisgnment 4 
+name: Assisgnment 4
 
 on:
   push:
@@ -16,17 +16,17 @@ jobs:
       - uses: actions/checkout@v3
       - uses: mirromutth/mysql-action@v1.1
         with:
-          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
-          collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
-          mysql version: '8.0' # Optional, default value is "latest". The version of the MySQL
-          mysql database: 'users' # Optional, default value is "test". The specified database which will be create
-          mysql root password: 'Xoxo@9898' # Required if "mysql user" is empty, default is empty. The root superuser password
-      
+          character set server: "utf8" # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+          collation server: "utf8_general_ci" # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+          mysql version: "8.0" # Optional, default value is "latest". The version of the MySQL
+          mysql database: "users" # Optional, default value is "test". The specified database which will be create
+          mysql root password: "Xoxo@9898" # Required if "mysql user" is empty, default is empty. The root superuser password
+
       - name: Set up JDK 18
         uses: actions/setup-java@v3
         with:
-          java-version: '18'
-          distribution: 'adopt'
+          java-version: "18"
+          distribution: "adopt"
           cache: maven
       - name: Build with Maven
         run: mvn clean install
@@ -61,3 +61,12 @@ jobs:
           target: myami.pkr.hcl
         env:
           PACKER_LOG: 1
+
+      - name: passing the ami id
+        run: echo "AMI_ID=$(jq -r '.builds[0].artifact_id' myami/manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
+
+      - name: create new instance
+        run: aws ec2 create-launch-template-version --launch-template-name demostack-EC2-instance --version-description WebVersion2 --source-version 1 --launch-template-data '{"ImageId":"${{ env.AMI_ID }}"}'
+
+      - name: xyz
+        run: aws autoscaling start-instance-refresh --auto-scaling-group-name demostack-asg --strategy Rolling --desired-configuration '{"LaunchTemplate":{"LaunchTemplateName":"demostack-EC2-instance","Version":"$Latest"}}'
