@@ -63,7 +63,7 @@ jobs:
           PACKER_LOG: 1
 
       - name: passing the ami id
-        run: echo "AMI_ID=$(jq -r '.builds[0].artifact_id' myami/manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
+        run: echo "AMI_ID=$(jq -r '.builds[0].artifact_id' manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
 
       - name: create new instance
         run: aws ec2 create-launch-template-version --launch-template-name demostack-EC2-instance --version-description WebVersion2 --source-version 1 --launch-template-data '{"ImageId":"${{ env.AMI_ID }}"}'
