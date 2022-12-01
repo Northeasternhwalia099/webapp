@@ -66,7 +66,7 @@ jobs:
         run: echo "AMI_ID=$(jq -r '.builds[0].artifact_id' manifest.json | cut -d ":" -f2)" >> $GITHUB_ENV
 
       - name: create new instance
-        run: aws ec2 create-launch-template-version --launch-template-name demostack-EC2-instance --version-description WebVersion2 --source-version 1 --launch-template-data '{"ImageId":"${{ env.AMI_ID }}"}'
+        run: aws ec2 create-launch-template-version --launch-template-name demo09-EC2-instance --version-description WebVersion2 --source-version 1 --launch-template-data '{"ImageId":"${{ env.AMI_ID }}"}'
 
       - name: xyz
         run: aws autoscaling start-instance-refresh --auto-scaling-group-name demostack-asg --strategy Rolling --desired-configuration '{"LaunchTemplate":{"LaunchTemplateName":"demostack-EC2-instance","Version":"$Latest"}}'
