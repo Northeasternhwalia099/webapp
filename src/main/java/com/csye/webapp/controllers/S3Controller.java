@@ -66,7 +66,7 @@ public class S3Controller {
     public ResponseEntity<?> uploadFiles(@RequestParam("file") MultipartFile file, HttpServletRequest request,
             HttpServletResponse response) {
         statsDClient.incrementCounter("create user api");
-        //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+       // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 
         LOG.info("Inside post api");
         long start = System.currentTimeMillis();
@@ -133,7 +133,7 @@ public class S3Controller {
 
         responseEntity.addProperty("message", "Invalid. Unable to Authenticate");
         long end = System.currentTimeMillis();
-        // statsDClient.recordExecutionTime("getUserApiTime", (end-start));
+        statsDClient.recordExecutionTime("getUserApiTime", (end-start));
         LOG.error("Invalid. Unable to Authenticate");
         return new ResponseEntity<String>(responseEntity.toString(), HttpStatus.UNAUTHORIZED);
     }

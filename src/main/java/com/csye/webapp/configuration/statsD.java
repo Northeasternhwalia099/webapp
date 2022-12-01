@@ -11,22 +11,25 @@ import org.springframework.context.annotation.Configuration;
 public class statsD {
 
     @Value("true")
-    private boolean publishMessage;
+    private boolean Message_publish;
 
     @Value("localhost")
-    private String metricHost;
+    private String metric_Host;
 
     @Value("8125")
-    private int portNumber;
+    private int port_Number;
 
     @Value("csye6225")
-    private String prefix;
+    private String prefix_;
 
     @Bean
     public StatsDClient metricClient() {
-        if (publishMessage)
-            return new NonBlockingStatsDClient(prefix, metricHost, portNumber);
-        return new NoOpStatsDClient();
+        if (Message_publish)
+       
+            return new NonBlockingStatsDClient(prefix_, metric_Host, port_Number);
+        
+        return 
+                new NoOpStatsDClient();
     }
 
 }
