@@ -18,7 +18,7 @@ public class HealthzContoller {
     StatsDClient statsDClient;
     private final static Logger LOG = LoggerFactory.getLogger(UserController.class);
 
-    @RequestMapping("/healthz")
+    @RequestMapping("/health")
     public ResponseEntity<?> get() {
         LOG.info("Inside HEALTHZ controller");
         LOG.info("healthz endpoint are hit");
